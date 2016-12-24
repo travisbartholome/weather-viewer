@@ -1,0 +1,4 @@
+{"location":{"name":"Kuzele","region":"North-Western Province","country":"South Africa","lat":-40,"lon":30,"tz_id":null,"localtime_epoch":1482571901,"localtime":"2016-12-24 9:31"},"current":{}},
+{"location":{"name":"Far Hid","region":"Bari","country":"Somalia","lat":0,"lon":50,"tz_id":"Etc/GMT-3","localtime_epoch":1482575507,"localtime":"2016-12-24 10:31"},"current":{}},
+{"location":{"name":"La Regente","region":"Matanzas","country":"Cuba","lat":20,"lon":-30,"tz_id":"Etc/GMT+2","localtime_epoch":1482546706,"localtime":"2016-12-24 2:31"},"current":{}},
+{"location":{"name":"Capetown","region":"California","country":"United States of America","lat":40,"lon":-130,"tz_id":"Etc/GMT+9","localtime_epoch":1482535909,"localtime":"2016-12-23 23:31"},"current":{}},
