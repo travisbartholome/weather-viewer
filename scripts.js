@@ -5,6 +5,7 @@
 
 // Global variables
 var temp_f, temp_c; // Storing API temperature data here.
+var resultsShown = false; // To prevent multiple submissions being shown.
 
 // Global constants
 const backgroundNames = [
@@ -112,11 +113,21 @@ function selectTempButton(eventData) {
 
 function displayWeather(response) {
   if (response.error) {
-    $('#location-form').prepend('<p>Sorry, your request caused an error.</p>');
+    $('#location-form').prepend('<p class="api-error-notice">Sorry, your request caused an error.</p>');
+    $('.api-error-notice').fadeIn(200).delay(800).fadeOut(600, function() {
+      $('.api-error-notice').remove();
+    });
     return console.error('API returned an error:', response.error.message);
   } else if (!response.current || !response.current.condition || !response.current.condition.text) {
     $('#location-form').prepend('<p>Sorry, there is no weather data for your location.</p>');
     return console.error('No weather data. Response:', response);
+  }
+
+  // To prevent multiple submissions being shown.
+  if (!resultsShown) {
+    resultsShown = true;
+  } else {
+    return;
   }
 
   setBackground(response);
@@ -162,19 +173,22 @@ $(function() {
   $('#location-form').submit(function(e) {
     e.preventDefault();
     var zip = $('#zip-input').val();
+
     if (zip === '') {
       let lat = $('#latitude').val();
       let long = $('#longitude').val();
-      try {
-        let parseLat = parseFloat(lat);
-        let parseLong = parseFloat(long);
-      } catch(error) {
+
+      let parseLat = parseFloat(lat);
+      let parseLong = parseFloat(long);
+      if (!isNaN(parseLat) && !isNaN(parseLong) &&
+          (Math.abs(parseLat) <= 90) && Math.abs(parseLong) <= 180) {
+        // TODO: There's some really weird behavior that parseFloat can actually handle.
+        // TODO: Work on handling said weird behavior.
+        makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
+      } else {
         return console.error('Invalid coordinates.' + lat + ',' + long);
         // TODO: Make this error user-visible
       }
-      // TODO: There's some really weird behavior that parseFloat can actually handle.
-      // TODO: Maybe work on handling said weird behavior.
-      makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
     } else {
       if (zip.length !== 5 || /\D/.test(zip)) {
         return console.error('Invalid zipcode.');
