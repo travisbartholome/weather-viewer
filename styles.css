@@ -1,0 +1,119 @@
+/* General stuff */
+
+* {
+  box-sizing: border-box;
+}
+
+/* Main display styles */
+
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Arima Madurai', sans-serif;
+  font-size: 24px;
+  text-align: center;
+}
+
+p {
+  margin: 0.6em 1em;
+}
+
+button {
+  background: #1F2D66;
+  border: none;
+  border-radius: 5px;
+  box-shadow: none;
+  color: #fff;
+  font-family: 'Arima Madurai', sans-serif;
+  font-size: 24px;
+  padding: 0.6em 1.2em;
+}
+
+.selected-button {
+  background: #0C0E4D;
+}
+
+#title {
+  font-family: 'Pacifico', serif;
+  font-size: 8vw;
+  margin: 2em 1em 0.8em 1em;
+}
+
+#temperature {
+  font-size: 10vw;
+  margin: 0.3em;
+  margin-bottom: 0;
+}
+
+/* Form elements before submission */
+
+input {
+  border: 2px solid #555;
+  border-radius: 5px;
+  box-shadow: none;
+  font-size: 24px;
+}
+
+input:focus {
+  border: 3px solid #7CAEFF;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+::-moz-placeholder {
+  text-align: center;
+}
+
+:-ms-input-placeholder {
+  text-align: center;
+}
+
+#zip-input {
+  width: 8em;
+}
+
+#latitude, #longitude {
+  width: 3em;
+}
+
+#get-weather {
+  margin-top: 2em;
+}
+
+/* Responsive stuff */
+
+@media (min-width: 500px) {
+  #title {
+    margin-bottom: 40px;
+  }
+}
+
+@media (min-width: 640px) {
+  #title {
+    margin-top: 1.5em;
+  }
+}
+
+@media (min-width: 1000px) {
+  #title {
+    font-size: 84px;
+  }
+
+  #temperature {
+    font-size: 112px;
+  }
+}
+
+@media (max-width: 640px) {
+  #temperature {
+    font-size: 64px;
+  }
+}
+
+@media (max-width: 500px) {
+  #title {
+    font-size: 40px;
+  }
+}

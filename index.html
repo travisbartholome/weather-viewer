@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<head>
+  <title>How's the Weather?</title>
+  <meta charset="utf-8" />
+  <link href="https://fonts.googleapis.com/css?family=Arima+Madurai|Pacifico" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <p id="title">How's the Weather?</p>
+    <form id="location-form">
+      <p>
+        <input id="zip-input" type="text" placeholder="5-digit zipcode" />
+      </p>
+
+      <p>or</p>
+
+      <p>
+        <input id="latitude" type="text" placeholder="Lat" />
+        <span>,</span>
+        <input id="longitude" type="text" placeholder="Long" />
+      </p>
+
+      <button id="get-weather" type="submit">Get Weather</button>
+    </form>
+
+    <div id="display" style="display: none">
+      <p id="temp-select">
+        <button id="temp-select-f">F</button>
+        <button id="temp-select-c">C</button>
+      </p>
+    </div>
+  </div>
+  <script src="jquery-3.1.0.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
