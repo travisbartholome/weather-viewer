@@ -17,8 +17,7 @@ const backgroundNames = [
   'snowy-day.png',
   'snowy-night.png'
 ];
-const BACKGROUND_URL = 'https://travisbartholome.github.io/weather-viewer/backgrounds/';
-const BACKGROUND_SUFFIX = '?raw=true';
+const BACKGROUND_PATH = './backgrounds/';
 
 
 function parseTime(timeString) {
@@ -81,7 +80,7 @@ function setBackground(response) {
         let fileName = i + '-';
         fileName += isDay ? 'day' : 'night';
         fileName += '.png';
-        $('body').css('background', 'url(' + BACKGROUND_URL + fileName + BACKGROUND_SUFFIX + ') no-repeat center 0px');
+        $('body').css('background', 'url(' + BACKGROUND_PATH + fileName + ') no-repeat center 0px');
         return;
       }
     }
@@ -92,7 +91,7 @@ function setBackground(response) {
   fileName += isDay ? 'day' : 'night';
   fileName += '.png';
   console.log('Didn\'t find a matching background: condition is "' + condition + '"');
-  $('body').css('background', 'url(' + BACKGROUND_URL + fileName + BACKGROUND_SUFFIX + ') no-repeat center 0px');
+  $('body').css('background', 'url(' + BACKGROUND_PATH + fileName + ') no-repeat center 0px');
 }
 
 
