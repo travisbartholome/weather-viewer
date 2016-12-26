@@ -162,11 +162,26 @@ $(function() {
   $('#location-form').submit(function(e) {
     e.preventDefault();
     var zip = $('#zip-input').val();
-    if (zip.length !== 5 || /\D/.test(zip)) {
-      return console.error('Invalid zipcode.');
-      // Add something that's visible outside the console to show this error.
+    if (zip === '') {
+      let lat = $('#latitude').val();
+      let long = $('#longitude').val();
+      try {
+        let parseLat = parseFloat(lat);
+        let parseLong = parseFloat(long);
+      } catch(error) {
+        return console.error('Invalid coordinates.' + lat + ',' + long);
+        // TODO: Make this error user-visible
+      }
+      // TODO: There's some really weird behavior that parseFloat can actually handle.
+      // TODO: Maybe work on handling said weird behavior.
+      makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
+    } else {
+      if (zip.length !== 5 || /\D/.test(zip)) {
+        return console.error('Invalid zipcode.');
+        // TODO: Add something that's visible outside the console to show this error.
+      }
+      makeAPIRequest(zip.toString());
     }
-    makeAPIRequest(zip.toString());
   });
 
   $('#temp-select-f').on('click', selectTempButton);
