@@ -8,7 +8,7 @@ var temp_f, temp_c; // Storing API temperature data here.
 var resultsShown = false; // To prevent multiple submissions being shown.
 
 // Global constants
-const backgroundNames = [
+const BACKGROUND_NAMES = [
   'clear-day.png',
   'clear-night.png',
   'cloudy-day.png',
@@ -87,7 +87,7 @@ function setBackground(response) {
     }
   }
 
-  // If we don't find a match, set the baackground to 'clear'
+  // If we don't find a match, set the background to 'clear'
   let fileName = 'clear-';
   fileName += isDay ? 'day' : 'night';
   fileName += '.png';
@@ -177,17 +177,19 @@ $(function() {
     if (zip === '') {
       let lat = $('#latitude').val();
       let long = $('#longitude').val();
-
-      let parseLat = parseFloat(lat);
-      let parseLong = parseFloat(long);
-      if (!isNaN(parseLat) && !isNaN(parseLong) &&
-          (Math.abs(parseLat) <= 90) && Math.abs(parseLong) <= 180) {
-        // TODO: There's some really weird behavior that parseFloat can actually handle.
-        // TODO: Work on handling said weird behavior.
-        makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
+      let floatRegex = /^-?\d+\.?\d*/;
+      if (lat.match(floatRegex) !== lat || long.match(floatRegex) !== long) {
+        return console.error('Invalid coordinates.');
       } else {
-        return console.error('Invalid coordinates.' + lat + ',' + long);
-        // TODO: Make this error user-visible
+        let parseLat = parseFloat(lat);
+        let parseLong = parseFloat(long);
+        if (!isNaN(parseLat) && !isNaN(parseLong) &&
+            (Math.abs(parseLat) <= 90) && Math.abs(parseLong) <= 180) {
+          makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
+        } else {
+          return console.error('Invalid coordinates: ' + lat + ',' + long);
+          // TODO: Make this error user-visible
+        }
       }
     } else {
       if (zip.length !== 5 || /\D/.test(zip)) {

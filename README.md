@@ -9,7 +9,9 @@ Once the app receives weather data, it displays that data along with a backgroun
 APIs and services I used for this project:
 
 - [APIXU](https://www.apixu.com) as the weather API
+
 - [Method Draw](http://editor.method.ac) to create the custom vector backgrounds
+
 - [Plotly](https://plot.ly) for some minor data visualization (mostly just for fun)
 
 Built largely for the curriculum at [Free Code Camp](https://www.freecodecamp.com).
