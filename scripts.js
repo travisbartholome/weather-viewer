@@ -1,4 +1,8 @@
-// TODO: Add user-visible error handling
+// TODO: Store response to API so that the user can't make multiple erroneous requests without changing some parameter.
+// That seems like a really great way to burn up API calls and/or flood the API with requests.
+// Include property checks, since object could either be:
+//  1. an error, or
+//  2. a valid response that just doesn't have weather data.
 
 // Many thanks to APIXU for having an easy-to-use API.
 // Custom backgrounds made with Method Draw.
@@ -119,7 +123,10 @@ function displayWeather(response) {
     });
     return console.error('API returned an error:', response.error.message);
   } else if (!response.current || !response.current.condition || !response.current.condition.text) {
-    $('#location-form').prepend('<p>Sorry, there is no weather data for your location.</p>');
+    $('#location-form').prepend('<p class="api-no-data-notice">Sorry, there is no weather data for your location.</p>');
+    $('.api-no-data-notice').fadeIn(200).delay(800).fadeOut(600, function() {
+      $('.api-no-data-notice').remove();
+    });
     return console.error('No weather data. Response:', response);
   }
 
@@ -158,6 +165,15 @@ function makeAPIRequest(locationString) {
   });
 }
 
+function showLocationFormError(errorType) {
+  // errorType should equal 'zipcode' or 'coordinates'
+  let errorString = (errorType === 'zipcode') ? 'an invalid zipcode.' : 'invalid coordinates.';
+  $('#location-form').prepend('<p class="location-form-error-notice">Sorry, your input contains ' + errorString + '</p>');
+  $('.location-form-error-notice').fadeIn(200).delay(800).fadeOut(600, function() {
+    $('.location-form-error-notice').remove();
+  });
+}
+
 $(function() {
   // Ideally, allow geolocation to use latitude and longitude for the API call.
   if ('geolocation' in navigator) {
@@ -178,8 +194,12 @@ $(function() {
       let lat = $('#latitude').val();
       let long = $('#longitude').val();
       let floatRegex = /^-?\d+\.?\d*/;
-      if (lat.match(floatRegex) !== lat || long.match(floatRegex) !== long) {
-        return console.error('Invalid coordinates.');
+      let matchedLat = lat.match(floatRegex);
+      let matchedLong = long.match(floatRegex);
+      if (!matchedLat || !matchedLong ||
+          matchedLat[0] !== lat || matchedLong[0] !== long) {
+        showLocationFormError('coordinates');
+        return console.error('Invalid coordinates: ' + lat + ',' + long);
       } else {
         let parseLat = parseFloat(lat);
         let parseLong = parseFloat(long);
@@ -187,14 +207,14 @@ $(function() {
             (Math.abs(parseLat) <= 90) && Math.abs(parseLong) <= 180) {
           makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
         } else {
+          showLocationFormError('coordinates');
           return console.error('Invalid coordinates: ' + lat + ',' + long);
-          // TODO: Make this error user-visible
         }
       }
     } else {
       if (zip.length !== 5 || /\D/.test(zip)) {
-        return console.error('Invalid zipcode.');
-        // TODO: Add something that's visible outside the console to show this error.
+        showLocationFormError('zipcode');
+        return console.error('Invalid zipcode: ' + zip);
       }
       makeAPIRequest(zip.toString());
     }
