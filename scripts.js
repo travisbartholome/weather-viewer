@@ -121,16 +121,16 @@ function selectTempButton(eventData) {
 
 function displayWeather(response) {
   if (response.error) {
-    $('#location-form').prepend('<p class="api-error-notice">Sorry, your request caused an error.</p>');
-    $('.api-error-notice').fadeIn(200).delay(800).fadeOut(600, function() {
-      $('.api-error-notice').remove();
-    });
+    showLocationFormError('api error');
+    if ($('#zip-input').val() !== '') submittedZip = $('#zip-input').val();
+    submittedLat = $('#latitude').val();
+    submittedLong = $('#longitude').val();
     return console.error('API returned an error:', response.error.message);
   } else if (!response.current || !response.current.condition || !response.current.condition.text) {
-    $('#location-form').prepend('<p class="api-no-data-notice">Sorry, there is no weather data for your location.</p>');
-    $('.api-no-data-notice').fadeIn(200).delay(800).fadeOut(600, function() {
-      $('.api-no-data-notice').remove();
-    });
+    showLocationFormError('no weather data');
+    if ($('#zip-input').val() !== '') submittedZip = $('#zip-input').val();
+    submittedLat = $('#latitude').val();
+    submittedLong = $('#longitude').val();
     return console.error('No weather data. Response:', response);
   }
 
@@ -174,7 +174,6 @@ function showLocationFormError(errorType) {
   if (errorShown) return;
   errorShown = true;
 
-  // errorType should equal 'zipcode', 'coordinates', 'repeated zip', or 'repeated coord'.
   let errorString;
   switch (errorType) {
     case 'zipcode':
@@ -188,6 +187,12 @@ function showLocationFormError(errorType) {
       break;
     case 'repeated coord':
       errorString = 'Please change the coordinates before re-submitting.';
+      break;
+    case 'api error':
+      errorString = 'Sorry, your request returned an API error.';
+      break;
+    case 'no weather data':
+      errorString = 'Sorry, there is no weather data for your location.';
       break;
     default:
       // Make more descriptive somehow?
