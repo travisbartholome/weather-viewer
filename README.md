@@ -18,7 +18,8 @@ Built largely for the curriculum at [Free Code Camp](https://www.freecodecamp.co
 
 ## Note about API keys
 
-To run any of the scripts in the data-gathering directory, you'll need to set up a file for the API keys. The keys should go in a file named "config.js" in the main project directory.
+To run any of the scripts in the data-gathering directory, you'll need to set up a file for the API keys.
+The keys should go in a file named "config.js" in the root project directory.
 
 config.js has the following structure:
 

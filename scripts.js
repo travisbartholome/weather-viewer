@@ -10,6 +10,7 @@
 // Global variables
 var temp_f, temp_c; // Storing API temperature data here.
 var resultsShown = false; // To prevent multiple submissions being shown.
+var errorShown = false; // To avoid having a ton of errors showing at once.
 
 // Global constants
 const BACKGROUND_NAMES = [
@@ -166,11 +167,15 @@ function makeAPIRequest(locationString) {
 }
 
 function showLocationFormError(errorType) {
+  // Don't show an error if one is already showing.
+  if (errorShown) return;
+  errorShown = true;
   // errorType should equal 'zipcode' or 'coordinates'
   let errorString = (errorType === 'zipcode') ? 'an invalid zipcode.' : 'invalid coordinates.';
   $('#location-form').prepend('<p class="location-form-error-notice">Sorry, your input contains ' + errorString + '</p>');
   $('.location-form-error-notice').fadeIn(200).delay(800).fadeOut(600, function() {
     $('.location-form-error-notice').remove();
+    errorShown = false;
   });
 }
 
