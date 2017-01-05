@@ -12,6 +12,9 @@ var temp_f, temp_c; // Storing API temperature data here.
 var resultsShown = false; // To prevent multiple submissions being shown.
 var errorShown = false; // To avoid having a ton of errors showing at once.
 
+// To prevent multiple submissions. Will be assigned at submit time.
+var submittedZip, submittedLat, submittedLong;
+
 // Global constants
 const BACKGROUND_NAMES = [
   'clear-day.png',
@@ -170,9 +173,29 @@ function showLocationFormError(errorType) {
   // Don't show an error if one is already showing.
   if (errorShown) return;
   errorShown = true;
-  // errorType should equal 'zipcode' or 'coordinates'
-  let errorString = (errorType === 'zipcode') ? 'an invalid zipcode.' : 'invalid coordinates.';
-  $('#location-form').prepend('<p class="location-form-error-notice">Sorry, your input contains ' + errorString + '</p>');
+
+  // errorType should equal 'zipcode', 'coordinates', 'repeated zip', or 'repeated coord'.
+  let errorString;
+  switch (errorType) {
+    case 'zipcode':
+      errorString = 'Sorry, your input contains an invalid zipcode.';
+      break;
+    case 'coordinates':
+      errorString = 'Sorry, your input contains invalid coordinates.';
+      break;
+    case 'repeated zip':
+      errorString = 'Please change the zipcode before re-submitting.';
+      break;
+    case 'repeated coord':
+      errorString = 'Please change the coordinates before re-submitting.';
+      break;
+    default:
+      // Make more descriptive somehow?
+      errorString = 'Sorry, we\'ve encountered an error.';
+      break;
+  }
+
+  $('#location-form').prepend('<p class="location-form-error-notice">' + errorString + '</p>');
   $('.location-form-error-notice').fadeIn(200).delay(800).fadeOut(600, function() {
     $('.location-form-error-notice').remove();
     errorShown = false;
@@ -195,14 +218,27 @@ $(function() {
     e.preventDefault();
     var zip = $('#zip-input').val();
 
+    if (submittedZip === zip) {
+      showLocationFormError('repeated zip');
+      return;
+    }
+
     if (zip === '') {
       let lat = $('#latitude').val();
       let long = $('#longitude').val();
+
+      if (lat === submittedLat && long === submittedLong) {
+        showLocationFormError('repeated coord');
+        return;
+      }
+
       let floatRegex = /^-?\d+\.?\d*/;
       let matchedLat = lat.match(floatRegex);
       let matchedLong = long.match(floatRegex);
       if (!matchedLat || !matchedLong ||
           matchedLat[0] !== lat || matchedLong[0] !== long) {
+        submittedLat = lat;
+        submittedLong = long;
         showLocationFormError('coordinates');
         return console.error('Invalid coordinates: ' + lat + ',' + long);
       } else {
@@ -212,12 +248,15 @@ $(function() {
             (Math.abs(parseLat) <= 90) && Math.abs(parseLong) <= 180) {
           makeAPIRequest('' + parseFloat(lat) + ',' + parseFloat(long));
         } else {
+          submittedLat = lat;
+          submittedLong = long;
           showLocationFormError('coordinates');
           return console.error('Invalid coordinates: ' + lat + ',' + long);
         }
       }
     } else {
       if (zip.length !== 5 || /\D/.test(zip)) {
+        submittedZip = zip;
         showLocationFormError('zipcode');
         return console.error('Invalid zipcode: ' + zip);
       }
