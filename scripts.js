@@ -1,9 +1,3 @@
-// TODO: Store response to API so that the user can't make multiple erroneous requests without changing some parameter.
-// That seems like a really great way to burn up API calls and/or flood the API with requests.
-// Include property checks, since object could either be:
-//  1. an error, or
-//  2. a valid response that just doesn't have weather data.
-
 // Many thanks to APIXU for having an easy-to-use API.
 // Custom backgrounds made with Method Draw.
 
